@@ -1,73 +1,86 @@
-# Talking Plant
+# Talking Plant 🌱
 
-A Roblox virtual-pet game where your companion is a living, talking houseplant.
-**The plant is the game:** every action gets a character reaction.
+A virtual pet for the web where your companion is a living, talking houseplant.
+**The plant is the game:** every action gets a reaction.
 
-## Status: Phase 1 (core prototype)
+It's a static site (plain HTML, CSS and JavaScript modules) with no build step and no dependencies.
 
-- Expressive plant built from simple parts: face with eyes, eyelids, brows, mouth shapes, blush, tears and sweat; leaves used as body language
-- Idle personality: blinking, looking around, sneezing, catching a fly, dancing, nodding off, falling into its pot, and more
-- Touch gestures: poke (repeated pokes make it annoyed, then angry), pet, rub leaves, tickle, pull a leaf, tap the pot, shake
-- Care tools that follow the pointer: watering can, fertilizer and sponge; a sleep/wake toggle that dims the room and tucks the plant in
-- Talking: quick-phrase chips plus free text (server-filtered); unknown phrases are repeated back
-- Needs (water, nutrients, energy, cleanliness, plus derived happiness), predicted on the client and authoritative on the server
-- Save system with session locking, retries, autosave and shutdown flush
-- About one minute of first-time tutorial: meet the plant, water it, earn +100 coins
+## Deploy to Vercel
 
-The Games, Shop and Style tabs show "coming soon" until Phase 2 and 3.
+1. Push this repo to GitHub.
+2. In Vercel, choose **Add New → Project** and import the repo.
+3. Leave the defaults (Framework preset: **Other**; no build command; output directory: the repo root) and click **Deploy**.
 
-## Getting started
+Or from a terminal: `npx vercel` (preview) and `npx vercel --prod`.
 
-1. Install [Rokit](https://github.com/rojo-rbx/rokit), then run `rokit install` in this folder (installs Rojo, Selene and StyLua).
-2. Install the Rojo plugin in Roblox Studio.
-3. Run `rojo serve`, open a new Baseplate in Studio, and connect from the Rojo plugin.
-   (Or run `rojo build -o TalkingPlant.rbxl` and open the file.)
-4. Delete the default Baseplate/SpawnLocation if present; the game builds its own room.
-5. To test saving in Studio: publish the place and enable **Game Settings → Security → Enable Studio Access to API Services**.
-   Without this, Studio uses a temporary unsaved profile and prints a warning.
+The microphone feature needs HTTPS, which Vercel provides automatically.
 
-## Architecture
+## Run locally
 
-There is exactly one server `Script` and one client `LocalScript`. Each boots its modules in a fixed order: every `init()` runs first, then every `start()`.
+```bash
+npm start        # serves the folder at http://localhost:3000
+npm test         # logic tests (Node 20+)
+```
+
+Any static server works (`python -m http.server`, etc.). Opening `index.html` directly from disk won't work, because browsers block JavaScript modules on `file://`.
+
+## What's in it
+
+- **Expressive plant** drawn in SVG, with eyelids, brows, six mouth shapes, blush, tears, sweat and dizzy eyes, and leaves used as body language.
+- **Personality:** it blinks, looks around, sneezes pollen, catches and eats a fly, dances, nods off, falls into its pot, and stares at you.
+- **Touch:**
+  - Tap its head to poke it; it gets annoyed after 3 pokes and angry after 5.
+  - Rub its head to pet it (hearts).
+  - Wiggle a leaf to tickle it.
+  - Drag a leaf outward to pull it, and it yells "OW!".
+  - Tap the pot and it looks down. Shake the pot and it gets dizzy.
+- **Care tools** follow your finger or mouse:
+  - Watering can: the soil darkens.
+  - Fertilizer.
+  - Sponge: scrubs off dirt.
+  - Sleep: the room goes dark and the plant is tucked under a blanket. It refuses if it isn't tired.
+- **Talking:**
+  - Quick phrases, or type anything; it repeats whatever it doesn't understand.
+  - **Hold 🎤** to record yourself, and it repeats you in a squeaky voice. In Chrome and Edge it also understands spoken phrases like "I love you".
+  - The plant speaks its lines aloud.
+- **Needs:** water, nutrients, energy and cleanliness, plus happiness derived from them. While you're away, needs drain at a quarter speed and never drop below 15. The plant greets you when you come back.
+- **Coins:** paid only when a need was actually low, so spamming the buttons earns nothing.
+- **About one minute of tutorial:** meet the plant, water it, and get +100 coins.
+- **Sound effects** are synthesized, so there are no audio files. 🔊 mutes everything.
+- **Saving:** progress is kept in the browser (`localStorage`) and works offline after the first load.
+
+## Code map
 
 ```
-src/shared/                 ReplicatedStorage.Shared
-  Config/PlantConfig        needs rates, care amounts, cooldowns, rewards
-  Config/ReactionConfig     every reaction, mood presets, idle antics (data only)
-  Config/TalkConfig         phrases the plant understands, quick chips
-  Util/NeedsMath            pure needs/mood math, shared by client & server
-  Net, Remotes, Types       the remote list, its access layer, shared types
-
-src/server/                 ServerScriptService.Server
-  Systems/DataService       profiles: UpdateAsync, session lock, autosave, migrations
-  Systems/PlantService      validates & applies care/talk/touch; owns coins
-  Util/RateLimiter          per-player token buckets for every remote
-
-src/client/                 StarterPlayerScripts.Client
-  Controllers/StateController       server snapshot + local prediction
-  Controllers/RoomBuilder           the room and its day/night lighting
-  Controllers/PlantController       mood → face/pose, reactions, motions, idle loop
-  Controllers/Plant/*               rig, face, effects, expression & pose presets
-  Controllers/InteractionController gestures and care tools
-  Controllers/ActionController      care/talk requests → plant reaction
-  Controllers/UIController + UI/*   HUD, needs panel, care tray, talk panel
-  Controllers/TutorialController    first-time flow
+index.html            page + HUD markup
+styles.css            all styling (mobile-first, safe-area aware)
+vercel.json           static hosting headers (allows the microphone)
+js/main.js            entry point
+js/config/            tunable data: needs/rewards, reactions & idle antics, phrases
+js/needs.js           pure needs/mood math
+js/state.js           save/load (localStorage), schema versioning
+js/actions.js         game rules: care, touch affection, talk, cooldowns, coins
+js/commands.js        runs an action and shows the result on the plant
+js/plant/             SVG rig, face, expression & pose presets, the plant "brain"
+js/effects.js         speech/thought bubbles, emoji, particles, the fly
+js/interaction.js     gestures + care tools
+js/tools.js           tool artwork
+js/ui.js              HUD wiring
+js/voice.js           record & squeaky playback, speech recognition, text-to-speech
+js/sfx.js             synthesized sound effects
+js/tutorial.js        first-time flow
+tests/                node:test logic tests
 ```
 
 ### Adding content
 
-- **A new reaction:** add an entry to `ReactionConfig.Reactions` that uses existing expressions, poses and effects. Add a face or body preset in `Plant/Expressions` or `Plant/Poses` if needed.
-- **A new idle antic:** add it to `ReactionConfig.Idle` with a weight and optional mood multipliers. Add a function to `Motions` in `PlantController` only if it needs scripted movement.
-- **A new phrase:** add patterns to `TalkConfig.Phrases`.
-- **A new remote:** add its name to `Remotes.luau`. Then validate and rate-limit it in its server system.
-- **A save-data change:** new fields go in `server/Data/ProfileTemplate` and are filled in automatically. If an existing field changes shape, bump `SCHEMA_VERSION` and add a `MIGRATIONS` step in `DataService`.
-
-### Security model
-
-The client only asks for things. The server checks every remote argument's type, rate-limits each player, enforces cooldowns, and pays coins only when a need was actually low. Repeated requests earn nothing. Free text is checked against `TextChatService:CanUserChatAsync` and passed through `TextService` filtering before the plant repeats it.
+- **A reaction:** add it to `js/config/reactions.js` using existing expressions, poses and effects. Add new face or body presets in `js/plant/expressions.js` or `js/plant/poses.js` if needed.
+- **An idle antic:** add it to `Idle` with a weight and optional mood multipliers. Add a function to `Motions` in `js/plant/controller.js` only if it needs scripted movement.
+- **A phrase:** add patterns to `js/config/talk.js`.
+- **A save-data change:** new fields go in `template()` in `js/state.js` and are filled in for old saves automatically. If an existing field changes shape, bump `SCHEMA_VERSION` and add a `MIGRATIONS` step.
 
 ## Roadmap
 
-- **Phase 2, progression:** XP, levels, visual growth stages, coins sink, shop, pots, accessories (standard attachment points)
-- **Phase 3, content:** minigames (Bug Catcher, Sun Catcher, Root Runner), room customization, evolutions, mutations, Plant Index, daily rewards
-- **Phase 4, polish:** sound, VFX, animation, mobile tuning, performance and exploit testing
+- **Progression:** XP, levels, visual growth stages, a shop, pots and accessories
+- **Content:** minigames (Bug Catcher, Sun Catcher, Root Runner), room customization, evolutions, mutations, Plant Index, daily rewards
+- **Polish:** more animation, sound and VFX

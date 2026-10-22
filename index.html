@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+		<title>Talking Plant</title>
+		<meta name="description" content="Meet your new leafy friend. Water it, feed it, pet it, talk to it, and watch it react." />
+		<meta name="theme-color" content="#c4e4cd" />
+		<meta property="og:title" content="Talking Plant" />
+		<meta property="og:description" content="A virtual pet that's a talking houseplant. Water it, poke it, talk to it." />
+		<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌱</text></svg>" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet" />
+		<link rel="stylesheet" href="./styles.css" />
+	</head>
+	<body>
+		<div id="app">
+			<svg id="room" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+				<defs>
+					<pattern id="wallpaper" width="60" height="60" patternUnits="userSpaceOnUse">
+						<circle cx="15" cy="15" r="4" class="wall-dot" />
+						<circle cx="45" cy="45" r="4" class="wall-dot" />
+					</pattern>
+					<linearGradient id="floorGrad" x1="0" y1="0" x2="0" y2="1">
+						<stop offset="0" stop-color="#d9a978" />
+						<stop offset="1" stop-color="#c08a5c" />
+					</linearGradient>
+					<radialGradient id="lampGlow">
+						<stop offset="0" stop-color="#ffe3a0" stop-opacity="0.9" />
+						<stop offset="1" stop-color="#ffe3a0" stop-opacity="0" />
+					</radialGradient>
+				</defs>
+				<rect width="1000" height="800" class="wall" />
+				<rect width="1000" height="800" fill="url(#wallpaper)" />
+
+				<!-- Window -->
+				<g transform="translate(120 110)">
+					<rect x="0" y="0" width="290" height="240" rx="8" class="sky" />
+					<circle cx="210" cy="70" r="34" class="sun" />
+					<g class="moon"><circle cx="210" cy="70" r="30" fill="#fff6d6" /><circle cx="224" cy="60" r="26" class="sky-cutout" /></g>
+					<g class="stars" fill="#fff">
+						<circle cx="40" cy="40" r="3" /><circle cx="90" cy="90" r="2" /><circle cx="140" cy="30" r="2.5" />
+						<circle cx="60" cy="160" r="2" /><circle cx="250" cy="170" r="3" /><circle cx="160" cy="130" r="2" />
+					</g>
+					<g class="clouds" fill="#fff">
+						<ellipse cx="80" cy="150" rx="50" ry="18" /><ellipse cx="110" cy="138" rx="34" ry="20" />
+						<ellipse cx="200" cy="200" rx="42" ry="14" /><ellipse cx="222" cy="190" rx="26" ry="15" />
+					</g>
+					<rect x="-10" y="-10" width="310" height="260" rx="14" fill="none" stroke="#fffaf0" stroke-width="20" />
+					<rect x="140" y="0" width="10" height="240" fill="#fffaf0" />
+					<rect x="0" y="115" width="290" height="10" fill="#fffaf0" />
+					<rect x="-26" y="246" width="342" height="20" rx="8" fill="#fffaf0" />
+					<path d="M-40 -30 Q -20 120 -48 290 L 0 290 Q 30 120 10 -30 Z" class="curtain" />
+					<path d="M330 -30 Q 310 120 338 290 L 290 290 Q 260 120 280 -30 Z" class="curtain" />
+					<rect x="-60" y="-44" width="410" height="16" rx="8" fill="#a8744d" />
+				</g>
+
+				<!-- Shelf, books, cactus friend and poster -->
+				<g transform="translate(640 160)">
+					<rect x="20" y="0" width="190" height="150" rx="10" fill="#fff6e6" stroke="#e8c79a" stroke-width="8" />
+					<text x="115" y="62" text-anchor="middle" font-size="48">🌱</text>
+					<text x="115" y="118" text-anchor="middle" class="poster-text">GROW BIG</text>
+					<rect x="0" y="230" width="250" height="16" rx="6" fill="#a8744d" />
+					<rect x="20" y="168" width="22" height="62" rx="3" fill="#f06e64" />
+					<rect x="44" y="180" width="18" height="50" rx="3" fill="#6ea0f0" />
+					<rect x="64" y="160" width="26" height="70" rx="3" fill="#ffd25a" />
+					<rect x="92" y="176" width="20" height="54" rx="3" fill="#a078dc" />
+					<path d="M170 230 L176 200 L214 200 L220 230 Z" fill="#dc7850" />
+					<rect x="184" y="150" width="22" height="52" rx="11" fill="#5aaa5a" />
+					<rect x="170" y="166" width="14" height="26" rx="7" fill="#5aaa5a" />
+				</g>
+
+				<!-- Floor lamp -->
+				<g transform="translate(40 250)" class="lamp">
+					<ellipse cx="60" cy="140" rx="160" ry="160" fill="url(#lampGlow)" class="lamp-glow" />
+					<path d="M20 0 L100 0 L120 80 L0 80 Z" fill="#ffecbe" stroke="#e6c47e" stroke-width="5" />
+					<rect x="55" y="80" width="10" height="290" fill="#a8744d" />
+					<ellipse cx="60" cy="372" rx="44" ry="10" fill="#8f5f3d" />
+				</g>
+
+				<!-- Floor and rug -->
+				<rect x="0" y="560" width="1000" height="44" class="wainscot" />
+				<rect x="0" y="600" width="1000" height="200" fill="url(#floorGrad)" />
+				<g stroke="#b47e52" stroke-width="3" opacity="0.6">
+					<line x1="0" y1="640" x2="1000" y2="640" /><line x1="0" y1="690" x2="1000" y2="690" /><line x1="0" y1="750" x2="1000" y2="750" />
+				</g>
+				<ellipse cx="500" cy="735" rx="280" ry="50" fill="#ffd27a" stroke="#f0b450" stroke-width="8" />
+			</svg>
+
+			<div id="night-overlay"></div>
+
+			<main id="stage" aria-label="Your plant. Tap, rub, or drag its leaves to interact.">
+				<svg id="plant" role="img" aria-label="Your talking plant"></svg>
+			</main>
+
+			<div id="fx" aria-hidden="false"></div>
+			<div id="tool-layer" aria-hidden="true"></div>
+
+			<div id="hud">
+				<button id="mood-btn" class="round-btn interactive" aria-label="Show your plant's needs" aria-expanded="false" aria-controls="needs-panel">
+					<span class="icon" id="mood-icon">🙂</span>
+					<span class="happiness"><span id="happiness-fill"></span></span>
+				</button>
+
+				<section id="needs-panel" class="panel interactive" aria-label="Plant needs" hidden></section>
+
+				<div class="top-right">
+					<button id="sound-btn" class="round-btn small interactive" aria-label="Mute sound" aria-pressed="false">🔊</button>
+					<div id="coins" class="pill interactive" aria-label="Coins"><span>🪙</span><span id="coin-count">0</span></div>
+				</div>
+
+				<div id="banner" class="panel" role="status" aria-live="polite"></div>
+				<div id="toast" role="status" aria-live="polite"></div>
+
+				<button id="talk-btn" class="round-btn accent interactive" aria-label="Talk to your plant" aria-expanded="false" aria-controls="talk-panel">💬</button>
+
+				<section id="care-tray" class="panel tray interactive" aria-label="Care tools" hidden>
+					<button class="tool-btn" data-care="Water"><span class="icon">💧</span><span class="label">Water</span></button>
+					<button class="tool-btn" data-care="Feed"><span class="icon">🌱</span><span class="label">Feed</span></button>
+					<button class="tool-btn" data-care="Clean"><span class="icon">🧽</span><span class="label">Clean</span></button>
+					<button class="tool-btn" data-care="Sleep"><span class="icon" id="sleep-icon">🌙</span><span class="label" id="sleep-label">Sleep</span></button>
+				</section>
+
+				<section id="talk-panel" class="panel interactive" aria-label="Talk to your plant" hidden>
+					<div class="chips" id="chips"></div>
+					<form id="talk-form" autocomplete="off">
+						<input id="talk-input" type="text" maxlength="100" placeholder="Say something to your plant..." aria-label="Message to your plant" enterkeyhint="send" />
+						<button type="button" id="mic-btn" class="square-btn" aria-label="Hold to talk out loud" title="Hold to talk — your plant repeats you!">🎤</button>
+						<button type="submit" class="square-btn accent" aria-label="Send">➤</button>
+					</form>
+				</section>
+
+				<nav id="nav" class="panel interactive" aria-label="Main">
+					<button data-nav="Home" class="selected"><span class="icon">🏠</span><span class="label">Home</span></button>
+					<button data-nav="Care"><span class="icon">🍃</span><span class="label">Care</span></button>
+					<button data-nav="Games"><span class="icon">🎮</span><span class="label">Games</span></button>
+					<button data-nav="Shop"><span class="icon">🛒</span><span class="label">Shop</span></button>
+					<button data-nav="Customize"><span class="icon">👕</span><span class="label">Style</span></button>
+				</nav>
+			</div>
+		</div>
+		<noscript>Talking Plant needs JavaScript to grow. 🌱</noscript>
+		<script type="module" src="./js/main.js"></script>
+	</body>
+</html>

@@ -1,0 +1,11 @@
+{
+	"name": "talking-plant",
+	"private": true,
+	"version": "1.0.0",
+	"type": "module",
+	"description": "A virtual pet that's a talking houseplant. Static site — no build step.",
+	"scripts": {
+		"start": "npx --yes serve .",
+		"test": "node --test tests/*.test.mjs"
+	}
+}
