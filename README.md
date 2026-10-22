@@ -1,6 +1,6 @@
 # Talking Plant
 
-A Roblox virtual-pet game where your companion is a living, talking houseplant.
+A  virtual-pet game where your companion is a living, talking houseplant.
 **The plant is the game:** every action gets a character reaction.
 
 ## Status: Phase 1 (core prototype)
