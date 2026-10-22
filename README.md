@@ -1,7 +1,12 @@
 # Talking Plant 🌱
 
+<<<<<<< HEAD
 A virtual pet for the web where your companion is a living, talking houseplant.
 **The plant is the game:** every action gets a reaction.
+=======
+A  virtual-pet game where your companion is a living, talking houseplant.
+**The plant is the game:** every action gets a character reaction.
+>>>>>>> 80f7934b24030706638cf43358103cf0d3f93c2c
 
 It's a static site (plain HTML, CSS and JavaScript modules) with no build step and no dependencies.
 
